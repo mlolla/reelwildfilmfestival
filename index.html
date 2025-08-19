@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REEL WILD NYC Trail</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-icon {
+            background: #16a34a;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            color: white;
+        }
+        
+        .logo-text h1 {
+            color: #166534;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        .logo-text p {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .points-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #dcfce7;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .points-badge:hover {
+            background: #bbf7d0;
+        }
+        
+        .points-badge span {
+            color: #166534;
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .trail-selection {
+            margin-bottom: 1.5rem;
+        }
+        
+        .trail-selection h2 {
+            color: #166534;
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .trail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .trail-option {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .trail-option:hover {
+            background: #f0fdf4;
+        }
+        
+        .trail-option.active {
+            background: #16a34a;
+            color: white;
+            border-color: #15803d;
+        }
+        
+        .trail-option h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .trail-option p {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .map-container {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        
+        .map-header {
+            background: #16a34a;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .map-header h3 {
+            font-weight: 700;
+        }
+        
+        .map-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .map-controls button {
+            background: #15803d;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .map-controls button:hover {
+            background: #16a34a;
+        }
+        
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .action-btn {
+            background: #16a34a;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        
+        .action-btn:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.secondary {
+            background: #2563eb;
+        }
+        
+        .action-btn.secondary:hover {
+            background: #1d4ed8;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-number.green { color: #16a34a; }
+        .stat-number.blue { color: #2563eb; }
+        .stat-number.yellow { color: #ca8a04; }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .modal-title span {
+            font-size: 1.5rem;
+        }
+        
+        .modal-title h3 {
+            color: #166534;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        .modal-description {
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+        
+        .nature-fact {
+            background: #f0fdf4;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #16a34a;
+        }
+        
+        .nature-fact p {
+            color: #15803d;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        
+        .modal-btn.primary {
+            background: #16a34a;
+            color: white;
+        }
+        
+        .modal-btn.primary:hover {
+            background: #15803d;
+        }
+        
+        .modal-btn.secondary {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .modal-btn.secondary:hover {
+            background: #1d4ed8;
+        }
+        
+        .checkin-btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .checkin-btn.active {
+            background: #16a34a;
+            color: white;
+        }
+        
+        .checkin-btn.active:hover {
+            background: #15803d;
+        }
+        
+        .checkin-btn.disabled {
+            background: #d1d5db;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+        
+        .progress-panel {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-header h3 {
+            color: #166534;
+            font-weight: 700;
+        }
+        
+        .progress-header span {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 0.75rem;
+            background: #e5e7eb;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #16a34a;
+            transition: width 0.3s ease;
+        }
+        
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+        }
+        
+        .badge-item {
+            background: #f0fdf4;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        
+        .badge-item p {
+            color: #15803d;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+        
+        .completion-banner {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #16a34a 0%, #2563eb 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: bounce 2s infinite;
+        }
+        
+        .completion-banner h3 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .completion-banner p {
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+            opacity: 0.9;
+        }
+        
+        .completion-banner button {
+            background: white;
+            color: #16a34a;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @media (max-width: 768px) {
+            .trail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i data-lucide="leaf"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>REEL WILD</h1>
+                    <p>NYC Nature Trail</p>
+                </div>
+            </div>
+            
+            <button class="points-badge" onclick="toggleProfile()">
+                <i data-lucide="award"></i>
+                <span id="pointsDisplay">0 pts</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Progress Panel -->
+    <div id="progressPanel" class="container progress-panel hidden">
+        <div class="progress-header">
+            <h3>Trail Progress</h3>
+            <span id="progressText">0/5 locations</span>
+        </div>
+        
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+        </div>
+        
+        <div id="badgesGrid" class="badges-grid">
+            <!-- Badges will be populated here -->
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Trail Selection -->
+        <div class="trail-selection">
+            <h2>Choose Your Trail</h2>
+            <div class="trail-grid">
+                <div class="trail-option active" onclick="selectTrail('attenborough')">
+                    <h4>David Attenborough's NYC</h4>
+                    <p>Discover urban wildlife through the lens of nature's greatest storyteller</p>
+                </div>
+                <div class="trail-option" onclick="selectTrail('goodall')">
+                    <h4>Jane Goodall's City Sanctuaries</h4>
+                    <p>Follow the path of conservation through NYC's green spaces</p>
+                </div>
+                <div class="trail-option" onclick="selectTrail('complete')">
+                    <h4>WCS Explorer Trail</h4>
+                    <p>The complete REEL WILD experience - all locations</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Container -->
+        <div class="map-container">
+            <div class="map-header">
+                <h3>Interactive Trail Map</h3>
+                <div class="map-controls">
+                    <button onclick="centerMap()">
+                        <i data-lucide="navigation"></i>
+                    </button>
+                    <button onclick="shareTrail()">
+                        <i data-lucide="share-2"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="map"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-grid">
+            <button class="action-btn" onclick="planRoute()">
+                🗺️ Plan Your Route
+            </button>
+            <button class="action-btn secondary" onclick="findNearest()">
+                📍 Find Nearest Location
+            </button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div id="visitedCount" class="stat-number green">0</div>
+                <div class="stat-label">Locations Visited</div>
+            </div>
+            <div class="stat-card">
+                <div id="badgeCount" class="stat-number blue">0</div>
+                <div class="stat-label">Badges Earned</div>
+            </div>
+            <div class="stat-card">
+                <div id="totalPoints" class="stat-number yellow">0</div>
+                <div class="stat-label">Total Points</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Modal -->
+    <div id="locationModal" class="modal hidden">
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="" class="modal-image">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            
+            <div class="modal-body">
+                <div class="modal-title">
+                    <span id="modalIcon"></span>
+                    <h3 id="modalTitle"></h3>
+                </div>
+                
+                <p id="modalDescription" class="modal-description"></p>
+                
+                <div class="nature-fact">
+                    <p id="modalFact"></p>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="modal-btn primary">
+                        <i data-lucide="play"></i>
+                        Watch Video
+                    </button>
+                    <button class="modal-btn secondary">
+                        <i data-lucide="camera"></i>
+                        AR View
+                    </button>
+                </div>
+
+                <button id="checkinBtn" class="checkin-btn active" onclick="checkIn()">
+                    Check In (+50 points)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Completion Banner -->
+    <div id="completionBanner" class="completion-banner hidden">
+        <h3>🎉 Trail Complete!</h3>
+        <p>You've discovered all NYC nature spots!</p>
+        <button onclick="claimReward()">Claim Your Reward at Lincoln Center</button>
+    </div>
+
+    <script>
+        let map;
+        let markers = [];
+        let userProgress = {
+            points: 0,
+            visitedSpots: [],
+            badges: []
+        };
+        
+        let currentSelectedSpot = null;
+
+        // Trail data
+        const trailSpots = [
+            {
+                id: 1,
+                title: "Central Park Conservatory Garden",
+                type: "garden",
+                lat: 40.7829,
+                lng: -73.9654,
+                description: "A hidden oasis of tranquil gardens in the heart of Manhattan",
+                natureFact: "This garden is home to over 20,000 plants representing species from around the world.",
+                videoUrl: "#",
+                icon: "🌸",
+                badge: "Garden Guardian",
+                points: 50,
+                imageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=200&fit=crop"
+            },
+            {
+                id: 2,
+                title: "The High Line",
+                type: "park",
+                lat: 40.7480,
+                lng: -74.0048,
+                description: "An elevated park built on former railway tracks",
+                natureFact: "The High Line's wild plants attracted over 160 species of birds during its abandoned years.",
+                videoUrl: "#",
+                icon: "🌿",
+                badge: "Urban Explorer",
+                points: 75,
+                imageUrl: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=400&h=200&fit=crop"
+            },
+            {
+                id: 3,
+                title: "Brooklyn Bridge Park",
+                type: "waterfront",
+                lat: 40.7024,
+                lng: -73.9969,
+                description: "Where city meets nature along the East River",
+                natureFact: "This waterfront park provides critical habitat for migratory birds traveling the Atlantic Flyway.",
+                videoUrl: "#",
+                icon: "🐦",
+                badge: "River Watcher",
+                points: 60,
+                imageUrl: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=200&fit=crop"
+            },
+            {
+                id: 4,
+                title: "Bryant Park",
+                type: "urban",
+                lat: 40.7536,
+                lng: -73.9832,
+                description: "A green sanctuary surrounded by skyscrapers",
+                natureFact: "Bryant Park's London Plane trees can absorb up to 15,000 gallons of stormwater annually.",
+                videoUrl: "#",
+                icon: "🌳",
+                badge: "City Naturalist",
+                points: 45,
+                imageUrl: "https://images.unsplash.com/photo-1522083165195-3424ed129620?w=400&h=200&fit=crop"
+            },
+            {
+                id: 5,
+                title: "Lincoln Center",
+                type: "destination",
+                lat: 40.7722,
+                lng: -73.9838,
+                description: "Your final destination - REEL WILD Film Festival",
+                natureFact: "Complete your journey where art and nature conservation come together through film.",
+                videoUrl: "#",
+                icon: "🎬",
+                badge: "Conservation Champion",
+                points: 100,
+                imageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop"
+            }
+        ];
+
+        // Initialize map
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: { lat: 40.7589, lng: -73.9851 }, // NYC center
+                styles: [
+                    {
+                        "featureType": "all",
+                        "elementType": "geometry",
+                        "stylers": [{"color": "#f5f5f5"}]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "all",
+                        "stylers": [{"color": "#e9f3ff"}]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "all",
+                        "stylers": [{"color": "#ffffff"}]
+                    }
+                ]
+            });
+
+            // Add markers for all trail spots
+            trailSpots.forEach(function(spot) {
+                var marker = new google.maps.Marker({
+                    position: { lat: spot.lat, lng: spot.lng },
+                    map: map,
+                    title: spot.title,
+                    icon: {
+                        url: createCustomIcon(spot.icon, false),
+                        scaledSize: new google.maps.Size(40, 40),
+                        anchor: new google.maps.Point(20, 20)
+                    }
+                });
+
+                marker.addListener('click', function() {
+                    openLocationModal(spot);
+                });
+
+                markers.push({marker: marker, spot: spot});
+            });
+
+            // Draw trail path
+            var pathCoordinates = [];
+            trailSpots.forEach(function(spot) {
+                pathCoordinates.push({ lat: spot.lat, lng: spot.lng });
+            });
+            
+            var trailPath = new google.maps.Polyline({
+                path: pathCoordinates,
+                geodesic: true,
+                strokeColor: '#16a34a',
+                strokeOpacity: 0.6,
+                strokeWeight: 4
+            });
+            trailPath.setMap(map);
+        }
+
+        // Create custom icon
+        function createCustomIcon(emoji, visited) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 40;
+            canvas.height = 40;
+
+            // Background circle
+            ctx.fillStyle = visited ? '#dcfce7' : '#ffffff';
+            ctx.strokeStyle = visited ? '#16a34a' : '#16a34a';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(20, 20, 18, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+
+            // Emoji
+            ctx.font = '16px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#000';
+            ctx.fillText(emoji, 20, 20);
+
+            // Check mark if visited
+            if (visited) {
+                ctx.fillStyle = '#16a34a';
+                ctx.font = 'bold 12px Arial';
+                ctx.fillText('✓', 30, 10);
+            }
+
+            return canvas.toDataURL();
+        }
+
+        // Update marker appearance
+        function updateMarker(spotId, visited) {
+            var markerData = null;
+            for (var i = 0; i < markers.length; i++) {
+                if (markers[i].spot.id === spotId) {
+                    markerData = markers[i];
+                    break;
+                }
+            }
+            
+            if (markerData) {
+                markerData.marker.setIcon({
+                    url: createCustomIcon(markerData.spot.icon, visited),
+                    scaledSize: new google.maps.Size(40, 40),
+                    anchor: new google.maps.Point(20, 20)
+                });
+            }
+        }
+
+        // Open location modal
+        function openLocationModal(spot) {
+            currentSelectedSpot = spot;
+            document.getElementById('modalImage').src = spot.imageUrl;
+            document.getElementById('modalIcon').textContent = spot.icon;
+            document.getElementById('modalTitle').textContent = spot.title;
+            document.getElementById('modalDescription').textContent = spot.description;
+            document.getElementById('modalFact').textContent = spot.natureFact;
+
+            const checkinBtn = document.getElementById('checkinBtn');
+            const isVisited = userProgress.visitedSpots.includes(spot.id);
+            
+            if (isVisited) {
+                checkinBtn.textContent = '✓ Checked In';
+                checkinBtn.className = 'checkin-btn disabled';
+                checkinBtn.onclick = null;
+            } else {
+                checkinBtn.textContent = 'Check In (+' + spot.points + ' points)';
+                checkinBtn.className = 'checkin-btn active';
+                checkinBtn.onclick = checkIn;
+            }
+
+            document.getElementById('locationModal').classList.remove('hidden');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('locationModal').classList.add('hidden');
+            currentSelectedSpot = null;
+        }
+
+        // Check in to location
+        function checkIn() {
+            if (!currentSelectedSpot || userProgress.visitedSpots.includes(currentSelectedSpot.id)) {
+                return;
+            }
+
+            const spot = currentSelectedSpot;
+            userProgress.visitedSpots.push(spot.id);
+            userProgress.points += spot.points;
+            userProgress.badges.push(spot.badge);
+
+            updateMarker(spot.id, true);
+            updateUI();
+            closeModal();
+
+            // Show completion banner if all spots visited
+            if (userProgress.visitedSpots.length === trailSpots.length) {
+                setTimeout(() => {
+                    document.getElementById('completionBanner').classList.remove('hidden');
+                }, 500);
+            }
+        }
+
+        // Update UI elements
+        function updateUI() {
+            document.getElementById('pointsDisplay').textContent = userProgress.points + ' pts';
+            document.getElementById('visitedCount').textContent = userProgress.visitedSpots.length;
+            document.getElementById('badgeCount').textContent = userProgress.badges.length;
+            document.getElementById('totalPoints').textContent = userProgress.points;
+
+            // Update progress
+            const progress = (userProgress.visitedSpots.length / trailSpots.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = userProgress.visitedSpots.length + '/' + trailSpots.length + ' locations';
+
+            // Update badges
+            const badgesGrid = document.getElementById('badgesGrid');
+            let badgesHTML = '';
+            userProgress.badges.forEach(function(badge) {
+                badgesHTML += '<div class="badge-item">' +
+                    '<i data-lucide="star" style="color: #ca8a04; margin-bottom: 4px;"></i>' +
+                    '<p>' + badge + '</p>' +
+                    '</div>';
+            });
+            badgesGrid.innerHTML = badgesHTML;
+
+            // Reinitialize Lucide icons
+            lucide.createIcons();
+        }
+
+        // Toggle profile panel
+        function toggleProfile() {
+            const panel = document.getElementById('progressPanel');
+            panel.classList.toggle('hidden');
+        }
+
+        // Trail selection
+        function selectTrail(trailType) {
+            // Update active trail
+            var options = document.querySelectorAll('.trail-option');
+            for (var i = 0; i < options.length; i++) {
+                options[i].classList.remove('active');
+            }
+            event.target.classList.add('active');
+
+            // Focus map on relevant locations
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < trailSpots.length; i++) {
+                var spot = trailSpots[i];
+                bounds.extend(new google.maps.LatLng(spot.lat, spot.lng));
+            }
+            map.fitBounds(bounds);
+        }
+
+        // Center map
+        function centerMap() {
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < trailSpots.length; i++) {
+                var spot = trailSpots[i];
+                bounds.extend(new google.maps.LatLng(spot.lat, spot.lng));
+            }
+            map.fitBounds(bounds);
+        }
+
+        // Share trail
+        function shareTrail() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'REEL WILD NYC Trail',
+                    text: 'Join me on the REEL WILD nature trail through NYC!',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                navigator.clipboard.writeText(window.location.href);
+                alert('Trail link copied to clipboard!');
+            }
+        }
+
+        // Plan route
+        function planRoute() {
+            if (userProgress.visitedSpots.length === 0) {
+                alert('Start by checking in to your first location!');
+            } else {
+                alert('Route planning feature coming soon! For now, follow the green trail on the map.');
+            }
+        }
+
+        // Find nearest location
+        function findNearest() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLat = position.coords.latitude;
+                    var userLng = position.coords.longitude;
+                    
+                    var nearest = trailSpots[0];
+                    var minDistance = getDistance(userLat, userLng, nearest.lat, nearest.lng);
+                    
+                    for (var i = 0; i < trailSpots.length; i++) {
+                        var spot = trailSpots[i];
+                        var distance = getDistance(userLat, userLng, spot.lat, spot.lng);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            nearest = spot;
+                        }
+                    }
+                    
+                    map.setCenter({lat: nearest.lat, lng: nearest.lng});
+                    map.setZoom(16);
+                    openLocationModal(nearest);
+                });
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        }
+
+        // Calculate distance between two points
+        function getDistance(lat1, lng1, lat2, lng2) {
+            const R = 6371; // Radius of the Earth in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLng = (lng2 - lng1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLng/2) * Math.sin(dLng/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Claim reward
+        function claimReward() {
+            alert('🎉 Congratulations! Present this screen at Lincoln Center to claim your REEL WILD reward!');
+        }
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Initialize the app
+        updateUI();
+    </script>
+
+    <!-- Google Maps API -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+    </script>
+</body>
+</html>
